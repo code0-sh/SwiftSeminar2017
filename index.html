@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Swift Seminar 2017</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/highlight.pack.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <div class="container">
+      <section>
+        <div class="playground-header">
+          <h2 class="main-title">Swift Seminar 2017</h2>
+        </div>
+      </section>
+      <section class="env mb20">
+        <h2 class="env-title">実行環境</h2>macOS Sierra 10.12.3 <br> Xcode 8.3 beta 3(8W132p)
+      </section>
+      <h3 class="play-title">Bluetooth Low Energy</h3>
+      <p class="mb10">※各Stepのプログラムは<a href="https://github.com/code0-sh/SwiftSeminarProgram2017" target="blank">こちら</a>にあります。</p>
+      <section class="playground">
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step1: Bluetooth Low Energyとは</div>
+            </div>
+            <div class="play-code">
+              <ul class="guidance">
+                <li>Bluetooth Low Energy(BLE, Bluetooth4.0)とは2.4GHzの省電力無線通信プロトコルです。<br>※ プロトコルとは通信での送受信の手順を定めた規格のこと。<br>以下の特徴をもつ。</li>
+                <ul class="mb20">
+                  <li>低消費電力: コイン型リチウムイオン電池1個で、通信モジュールを1～2年間動作させることが可能</li>
+                  <li>通信速度: 10～50kbps</li>
+                  <li>通信距離: 2.5〜50m ※障害物によって影響を受ける。</li>
+                </ul>
+                <dl class="mb20">
+                  <dt>BLEの登場人物</dt>
+                  <dd>
+                    <ul>
+                      <li>ペリフェラル(周辺装置、Peripherals)</li>
+                      <li>セントラル(中央装置、Centrals)</li>
+                    </ul>
+                  </dd>
+                </dl>
+                <dl class="mb20">
+                  <dt><span class="highlight marker">ペリフェラル</span></dt>
+                  <dd>他のデバイスが必要とするデータがあって、それを提供する。</dd>
+                  <dd>
+                    <canvas id="canvas-peripherals"></canvas>
+                  </dd>
+                  <dd>ペリフェラルは自身の存在を知らしめるため、電波を使って周囲に<span class="highlight marker">アドバタイズ</span>する。</dd>
+                </dl>
+                <dl>
+                  <dt><span class="highlight marker">セントラル</span></dt>
+                  <dd>必要なデータを提供してくれるペリフェラルがないか走査し、該当するペリフェラルを検出すると、接続を要求し、データのやり取りを始める。</dd>
+                </dl>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step2: Core Bluetoothフレームワーク</div>
+            </div>
+            <div class="play-code">
+              <div class="guidance mb10">
+                <p>iOS/Macアプリケーションで、BLEを実装したデバイスと通信するために使用するフレームワーク</p>
+              </div>
+              <dl class="subject mb10">
+                <dt class="subject-title">補足事項</dt>
+                <dd class="subject-contents"><span class="emphasis">SpriteKitのビュー、シーン、ノード、アクション</span>
+                  <ul class="ml20 mb10">
+                    <li>ビュー:シーンをのせる舞台。UIViewControllerのサブクラス</li>
+                    <li>シーン:ゲーム画面、結果画面などの各画面。SKSceneのサブクラス</li>
+                    <li>ノード:シーンにのせる登場人物。SKNodeのサブクラス(SKSpriteNode,SKLabelNode,..)</li>
+                    <li>アクション:ノードの振る舞い。SKActionのメソッドで実行する(removeFromParent,move,..)</li>
+                  </ul><img src="images/step2_xcode_01.png">
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step3: 文字を表示する</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">SKLabelNodeを使って文字を表示できる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>SKLabelNodeを使って文字列「Hello, SpriteKit」を表示する。</span></div>
+                  <ul class="ml20 mb10">
+                    <li>フォント名 Chalkduster</li>
+                    <li>文字サイズ 30</li>
+                    <li>文字色 green</li>
+                    <li>文字の位置 画面の中心</li>
+                  </ul><img src="images/step3_xcode_01.png" class="capture">
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">解答例</button>
+              <div class="answer hidden"><pre><code class="lang-swift">class GameScene: SKScene {
+    /// Sceneが表示された際に実行される
+    override func didMove(to view: SKView) {
+        // ラベルのフォントを指定しインスタンスを生成する
+        let label = SKLabelNode(fontNamed:&quot;Chalkduster&quot;)
+        // ラベルに表示する文字列
+        label.text = &quot;Hello, SpriteKit&quot;
+        // ラベルの文字サイズ
+        label.fontSize = 30
+        // ラベルの文字色
+        label.fontColor = SKColor.green()
+        // ラベルの位置
+        label.position = CGPoint(x:self.frame.midX, y:self.frame.midY);
+
+        // シーンに追加
+        self.addChild(label)
+
+        // 背景色
+        self.backgroundColor = SKColor.purple()
+    }
+}
+</code></pre>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step4: 画像を表示する</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">SKSpriteNode、SKTextureを使って画像を表示できる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>画像を表示変更する。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>SKSpriteNodeを使って画像を表示する。</li>
+                    <li>SKTextureを使って画像を変更する。</li>
+                  </ol>
+                  <ul class="displayTable">
+                    <li class="tableCell pr10"><img src="images/step4_xcode_03.png" class="capture mr10"></li>
+                    <li class="tableCell"><img src="images/step4_xcode_04.png" class="capture"></li>
+                  </ul>
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">解答例</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>Assets.xcassetsに画像ファイル(person.png)をドラッグアンドドロップする。</li><img src="images/step4_xcode_01.png" class="capture"><pre><code class="lang-swift">class GameScene: SKScene {
+    /// Sceneが表示された際に実行される
+    override func didMove(to view: SKView) {
+        // スプライトを作成
+        let person = SKSpriteNode(imageNamed: &quot;person.png&quot;)
+        // スプライトのサイズ
+        person.size = CGSize(width: 100, height: 100)
+        // スプライトの位置
+        person.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
+        // スプライトを配置する
+        self.addChild(person)
+        // 画面の背景色
+        self.backgroundColor = UIColor.lightGray()
+    }
+}
+</code></pre>
+
+                  <li>Assets.xcassetsに画像ファイル(airplane.png)をドラッグアンドドロップする。
+                    <div><img src="images/step4_xcode_02.png" class="capture"></div>
+                  </li><pre><code class="lang-swift">class GameScene: SKScene {
+    /// Sceneが表示された際に実行される
+    override func didMove(to view: SKView) {
+        // スプライトを作成
+        let sprite = SKSpriteNode(imageNamed: &quot;person.png&quot;)
+        // スプライトのサイズ
+        sprite.size = CGSize(width: 50, height: 50)
+        // スプライトの位置
+        sprite.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
+        // スプライトを配置する
+        self.addChild(sprite)
+        // 画面の背景色
+        self.backgroundColor = UIColor.lightGray()
+
+        // 画像の差し替え
+        let texture = SKTexture(imageNamed: &quot;airplane.png&quot;)
+        sprite.texture = texture
+
+        // 色をブレンドする
+        sprite.color = #colorLiteral(red: 0.1991284192, green: 0.6028449535, blue: 0.9592232704, alpha: 1)
+        sprite.colorBlendFactor = 1
+    }
+}
+</code></pre>
+
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step5: アニメーション</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">SKActionを使ったアニメーションができる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents mb10">
+                  <div class="mb10"><span>SKActionを使って対象物にアニメーションを付ける。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>SKSpriteNodeを使用しアニメーションの対象物を生成する。</li>
+                    <li>対象物を配置する。</li>
+                    <li>SKActionを使用しアニメーションを作成する。</li>
+                    <li>作成したアニメーションを対象物に設定する。</li>
+                  </ol><img src="images/step5_xcode_02.png" class="capture">
+                </dd>
+                <dt class="subject-title">補足事項</dt>
+                <dd class="subject-contents">対象物はbackground.pngを使用するためAssets.xcassetsに画像ファイル(background.png)をドラッグアンドドロップする。
+                  <div><img src="images/step5_xcode_01.png" class="capture"></div>
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">解答例</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li><pre><code class="lang-swift">class GameScene: SKScene {
+    /// 背景画像を設定する
+    func setupBackground(baseNode: SKNode) {
+        // 背景画像からテクスチャを作成
+        let texture = SKTexture(imageNamed: &quot;background&quot;)
+        // フィルタリングモード（テクスチャの本来のサイズ以外で描画される場合に使用される）
+        // .linear クォリティー高い
+        // .nearest クォリティー低い
+        texture.filteringMode = .nearest
+
+        // 必要な画像枚数を算出
+        let needHeightNumber: CGFloat = ceil(self.frame.size.height / texture.size().height) + 1
+        let needWidthNumber: CGFloat = ceil(self.frame.size.width / texture.size().width)
+
+        // アニメーションを作成
+        let moveAnim = SKAction.moveBy(x: 0.0, y: -texture.size().height, duration: TimeInterval(texture.size().height / 10.0))
+        let resetAnim = SKAction.moveBy(x: 0.0, y: texture.size().height, duration: 0.0)
+        let repeatForeverAnim = SKAction.repeatForever(SKAction.sequence([moveAnim, resetAnim]))
+
+        // 画像の配置とアニメーションを設定
+        for i in 0 ... Int(needWidthNumber) {
+            for j in 0 ... Int(needHeightNumber) {
+                let sprite = SKSpriteNode(texture: texture)
+                sprite.zPosition = -100
+                sprite.position = CGPoint(x: CGFloat(i) * sprite.size.width, y: CGFloat(j) * sprite.size.height)
+                sprite.speed = 20
+                sprite.run(repeatForeverAnim)
+                baseNode.addChild(sprite)
+            }
+        }
+    }
+    /// Sceneが表示された際に実行される
+    override func didMove(to view: SKView) {
+        let baseNode = SKNode()
+        self.setupBackground(baseNode: baseNode)
+        self.addChild(baseNode)
+    }
+}
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step6: 物理空間の生成と衝突</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">physicsWorld、physicsBody、SKPhysicsBodyを使って物理空間を生成し、衝突イベントを設定できる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents mb10">
+                  <div class="mb10"><span>physicsWorld、physicsBody、SKPhysicsBodyを使って物理空間を生成し、他物体との衝突イベントを生じさせる。衝突時に一方を消す。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>SKSpriteNodeを使用し対象物を生成する。</li>
+                    <li>対象物をランダムに配置する。</li>
+                    <li>physicsWorld、physicsBody、SKPhysicsBodyを使って物理空間を生成する。</li>
+                    <li>衝突イベントを設定する。</li>
+                  </ol><img src="images/step6_xcode_02.png" class="capture">
+                </dd>
+                <dt class="subject-title">補足事項</dt>
+                <dd class="subject-contents">対象物はenemy.pngを使用するためAssets.xcassetsに画像ファイル(enemy.png)をドラッグアンドドロップする。
+                  <div><img src="images/step6_xcode_01.png" class="capture"></div>
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>衝突判定用のビット値の定義<pre><code class="lang-swift">    struct ColliderType {
+        static let Enemy: UInt32 = (1 &lt;&lt; 0)
+        static let World: UInt32 = (1 &lt;&lt; 1)
+    }
+</code></pre>
+
+                  </li>
+                  <li>対象物の生成と配置<pre><code class="lang-swift">        let radius: CGFloat = 10 // エネミー画像の半径
+        let texture = SKTexture(imageNamed: &quot;enemy&quot;)
+        let enemy = SKSpriteNode(texture: texture)
+        enemy.size = CGSize(width: radius * 2, height: radius * 2)
+        let randIntX = radius + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width - radius * 2)))
+        let randIntY = radius + (CGFloat)(arc4random_uniform((UInt32)(self.frame.height - radius * 2)))
+        enemy.position = CGPoint(x:randIntX, y:randIntY)
+</code></pre>
+
+                  </li>
+                  <li>Sceneの物理設定<pre><code class="lang-swift">        self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -0.5) // 重力
+        self.physicsWorld.contactDelegate = self // 衝突デリゲート
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        self.physicsBody?.restitution = 1.0 // 反発係数
+        self.physicsBody?.linearDamping = 0.0 // 空気抵抗
+        self.physicsBody?.friction = 0.0 // 摩擦
+        self.physicsBody?.categoryBitMask = ColliderType.World // 物体種別
+        self.physicsBody?.collisionBitMask = ColliderType.Enemy // どの物体と接触した場合に衝突させるか
+</code></pre>
+
+                  </li>
+                  <li>対象物の物理設定<pre><code class="lang-swift">            enemy.physicsBody = SKPhysicsBody(circleOfRadius: radius)
+            enemy.physicsBody?.restitution = 1.0 // 反発係数
+            enemy.physicsBody?.linearDamping = 0.0 // 空気抵抗
+            enemy.physicsBody?.mass = 1.0 // 質量
+            enemy.physicsBody?.friction = 0.0 // 摩擦
+            enemy.physicsBody?.categoryBitMask = ColliderType.Enemy // 物体種別
+            enemy.physicsBody?.collisionBitMask = ColliderType.Enemy | ColliderType.World // どの物体と接触した場合に衝突させるか
+            enemy.physicsBody?.contactTestBitMask = ColliderType.Enemy // どの物体と接触した場合にイベントを発生させるか
+</code></pre>
+
+                  </li>
+                  <li>衝突時のイベント<pre><code class="lang-swift">    func didBegin(_ contact: SKPhysicsContact) {
+        contact.bodyA.node?.removeFromParent() // 衝突した一方を削除する
+    }
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step7: タップ</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">タップイベントを設定できる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>タップすると飛行機がタップ位置に移動する。ダブルタップの場合移動後に弾丸を発射する。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>SKSpriteNodeを使用し飛行機を生成し配置する。</li>
+                    <li>タップ開始イベントを設定する。</li>
+                    <li>タップ終了イベントを設定する。</li>
+                    <li>SKShapeNodeを使用し弾丸をタップ位置に生成し、アニメーションを設定する。</li>
+                  </ol><img src="images/step7_xcode_01.png" class="capture">
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>タップ開始イベント<pre><code class="lang-swift">    override func touchesBegan(_ touches: Set&lt;UITouch&gt;, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            //
+        }
+    }
+</code></pre>
+
+                  </li>
+                  <li>タップイベント<pre><code class="lang-swift">    override func touchesEnded(_ touches: Set&lt;UITouch&gt;, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            let tapCount = touch.tapCount
+            //
+        }
+    }
+</code></pre>
+
+                  </li>
+                  <li>SKShapeNodeを使用した弾丸の生成<pre><code class="lang-swift">        let shell = SKShapeNode(circleOfRadius: 5)
+        shell.position = CGPoint(x: location.x, y: 110)
+        shell.fillColor = SKColor.red()
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step8: パーティクルと効果音</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">パーティクルと効果音を設定できる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents mb10">
+                  <div class="mb10"><span>タップすると星のパーティクルが発生し、効果音が鳴る。パーティクルは一定時間経つと消える。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>SKEmitterNodeを使用し星のパーティクルを生成する。</li>
+                    <li>SKActionを設定し効果音をつける。</li>
+                    <li>タップ開始イベントで1,2を実行する。</li>
+                  </ol><img src="images/step8_xcode_02.png" class="capture">
+                </dd>
+                <dt class="subject-title">補足事項</dt>
+                <dd class="subject-contents">星(star.png)と効果音(sound_explosion.mp3)を使用するためAssets.xcassetsに対象ファイルをドラッグアンドドロップする。
+                  <div><img src="images/step8_xcode_01.png" class="capture"></div>
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>パーティクル生成<pre><code class="lang-swift">        let particle = SKEmitterNode(fileNamed: &quot;ConflictParticle.sks&quot;)
+        particle?.position = CGPoint(x: location.x, y: location.y)
+        self.addChild(particle!)
+</code></pre>
+
+                  </li>
+                  <li>効果音再生<pre><code class="lang-swift">    let sound = SKAction.playSoundFileNamed(&quot;sound_explosion.mp3&quot;, waitForCompletion: false)
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step9: 加速度センサー</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">加速度センサーを使用できる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>端末を傾けると飛行機が横(X軸方向)に移動する。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>SKSpriteNodeを使用して飛行機を生成する。</li>
+                    <li>Sceneと飛行機に物理空間を設定する。</li>
+                    <li>加速度データを使用して飛行機のx方向の移動距離を算出する。</li>
+                    <li>1フレームごとに3から飛行機の位置を更新する。</li>
+                  </ol><img src="images/step9_xcode_01.png" class="capture">
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>衝突判定用のビット値の定義<pre><code class="lang-swift">    struct ColliderType {
+        static let Ship: UInt32 = (1 &lt;&lt; 0)
+        static let World: UInt32 = (1 &lt;&lt; 1)
+    }
+</code></pre>
+
+                  </li>
+                  <li>飛行機の物理空間の設定<pre><code class="lang-swift">        ship.physicsBody = SKPhysicsBody(rectangleOf: ship.size)
+        ship.physicsBody?.affectedByGravity = false // 飛行機に重力を効かせない
+        ship.physicsBody?.categoryBitMask = ColliderType.Ship // 物体種別
+        ship.physicsBody?.collisionBitMask = ColliderType.World // どの物体と接触した場合に衝突させるか
+</code></pre>
+
+                  </li>
+                  <li>Sceneの物理空間の設定<pre><code class="lang-swift">        self.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
+        self.physicsBody?.categoryBitMask = ColliderType.World // 物体種別
+        self.physicsBody?.collisionBitMask = ColliderType.Ship // どの物体と接触した場合に衝突させるか
+</code></pre>
+
+                  </li>
+                  <li>1フレーム毎に呼ばれるメソッド<pre><code class="lang-swift">    override func update(_ currentTime: TimeInterval) {
+        //
+    }
+</code></pre>
+
+                  </li>
+                  <li>加速度データの使用<pre><code class="lang-swift">    // 加速度を取得するためにはCoreMotionをインポートする
+    import CoreMotion
+
+    // 使用例
+    motionManager = CMMotionManager()
+    motionManager.accelerometerUpdateInterval = 0.1 // 取得間隔
+    let accelerometerHandler: CMAccelerometerHandler = {
+        (data: CMAccelerometerData?, error: NSError?) -&gt; Void in
+        guard let data = data else {
+            return
+        }
+        print(&quot;x:\(data.acceleration.x) y:\(data.acceleration.y)&quot;)
+        //
+    }
+    motionManager.startAccelerometerUpdates(to: OperationQueue.current()!, withHandler: accelerometerHandler) // 加速度センサーを使用開始
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step10: シーン間の遷移</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">シーン間の遷移ができるようになる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>3つのシーン(HomeScene、GameScene、ResultScene)を生成して遷移させる。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>3つのシーンを生成する。</li>
+                    <li>遷移イベントのトリガー(タッチ開始イベント)を生成する。</li>
+                    <li>遷移元から遷移先にuserDataを使用しデータを渡す。</li>
+                  </ol>
+                  <ul class="displayTable">
+                    <li class="tableCell pr10"><img src="images/step10_xcode_01.png" class="capture"></li>
+                    <li class="tableCell pr10"><img src="images/step10_xcode_02.png" class="capture"></li>
+                    <li class="tableCell"><img src="images/step10_xcode_03.png" class="capture"></li>
+                  </ul>
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>シーンへの遷移とアニメーション設定<pre><code class="lang-swift">        // GameSceneへの遷移
+        let transition = SKTransition.doorway(withDuration: 1)
+        let newScene = GameScene()
+        newScene.size = self.frame.size
+        view?.presentScene(newScene, transition: transition)
+</code></pre>
+
+                  </li>
+                  <li>userDataの使い方<pre><code class="lang-swift">        // 遷移元
+        scene.userData = NSMutableDictionary()
+        scene.userData?.setObject(score, forKey: &quot;score&quot;)
+
+        // 遷移先
+        self.scene?.userData?[&quot;score&quot;]
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step11: シューティングゲーム</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">Step1〜10までの機能を組み合わせたプログラム作成ができる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>シューティングゲームを作成する。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>3つのシーン(HomeScene,GameScene,ResultScene)を生成する。</li>
+                    <li>HomeScene
+                      <ul>
+                        <li>Startラベルを配置する。</li>
+                        <li>StartラベルをタップするとGameSceneに遷移する。</li>
+                      </ul>
+                    </li>
+                    <li>GameScene
+                      <ul>
+                        <li>背景画像を設定する。</li>
+                        <li>飛行機を設定する。</li>
+                        <li>エネミーを設定する。</li>
+                        <li>弾丸を設定する。</li>
+                        <li>パーティクルを設定する。</li>
+                        <li>飛行機のステータスを設定する。</li>
+                        <li>弾丸のステータスを設定する。</li>
+                        <li>スコアを設定する。</li>
+                        <li>接触時のイベントを設定する。</li>
+                        <li>タップ開始イベントを設定する。</li>
+                        <li>ResultSceneのuserDataにスコアを保存する。</li>
+                      </ul>
+                    </li>
+                    <li>ResultScene
+                      <ul>
+                        <li>ゲームオーバー、スコア、再スタートラベルを配置する。</li>
+                        <li>再スタートラベルタッチするとGameSceneに遷移する。</li>
+                      </ul>
+                    </li>
+                  </ol>
+                  <ul class="displayTable">
+                    <li class="tableCell pr10"><img src="images/step11_xcode_01.png" class="capture"></li>
+                    <li class="tableCell pr10"><img src="images/step11_xcode_02.png" class="capture"></li>
+                    <li class="tableCell"><img src="images/step11_xcode_03.png" class="capture"></li>
+                  </ul>
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step12: データの永続化</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">UserDefaultsを使用したデータの永続化ができる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>タップした回数を保存、参照、削除する。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>表示数値、数値Up、End、Save, Clearラベルを配置する。</li>
+                    <li>数値Upラベルをタップすると表示数値が+1(インクリメント)される。</li>
+                    <li>Endラベルをタップすると再度GameSceneを表示する。</li>
+                    <li>Saveラベルをタップすると表示数値を保存する。</li>
+                    <li>Clearラベルをタップすると保存されている表示数値を削除する。</li>
+                  </ol><img src="images/step12_xcode_01.png" class="capture">
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>UserDefaultsの使い方<pre><code class="lang-swift">    // NSUserDefaultsの取得
+    let defaults: UserDefaults = UserDefaults.standard()
+
+    var score: Int = 0
+
+    // スコアをUserDefaultsに保存
+    defaults.set(self.score, forKey: &quot;Score&quot;)
+
+    // スコアをUserDefaultsから読み取る
+    score = defaults.integer(forKey: &quot;Score&quot;)
+
+    // スコアをUserDefaultsから削除
+    defaults.removeObject(forKey: &quot;Score&quot;)
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step13: シーンとビューコントローラー間の遷移</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">シーンとビューコントローラー間の遷移ができる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents">
+                  <div class="mb10"><span>シーン -> シーン -> ビューコントロラー -> シーン の順で遷移させる。</span></div>
+                  <ol class="ml20 mb10">
+                    <li>FirstViewControllerでStartScene,EndSceneと遷移する。</li>
+                    <li>NotificationCenterを使ってEndSceneからSecondViewControllerに遷移する。</li>
+                    <li>SecondViewControllerからFirstViewControllerのStartSceneに遷移する。</li>
+                  </ol>
+                  <ul class="displayTable">
+                    <li class="tableCell pr10"><img src="images/step13_xcode_01.png" class="capture"></li>
+                    <li class="tableCell pr10"><img src="images/step13_xcode_02.png" class="capture"></li>
+                    <li class="tableCell"><img src="images/step13_xcode_03.png" class="capture"></li>
+                  </ul>
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>ビューコントロラーへの遷移<pre><code class="lang-swift">        let storyboard: UIStoryboard = self.storyboard!
+        let firstViewController = storyboard.instantiateViewController(withIdentifier: &quot;first&quot;) as! FirstViewController
+        self.present(firstViewController, animated: true, completion: nil)
+</code></pre>
+
+                  </li>
+                  <li>NotificationCenterの使い方<pre><code class="lang-swift">        // 通知の監視
+        NotificationCenter.default().addObserver(self,
+                                                 selector: #selector(moveSecondViewController),
+                                                 name: &quot;MoveSecondViewController&quot;,
+                                                 object: nil)
+
+        // 通知を送る
+        NotificationCenter.default().post(name: &quot;MoveSecondViewController&quot; as NSNotification.Name, object: nil)
+
+        // 通知の監視の終了
+        NotificationCenter.default().removeObserver(self)
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step14: データの共有</div>
+            </div>
+            <div class="play-code">
+              <dl class="learn">
+                <dt class="learn-title">習得事項</dt>
+                <dd class="learn-contents">FirebaseのAuthとRealtime Databaseを使うことができる。</dd>
+              </dl>
+              <dl class="subject mb10">
+                <dt class="subject-title">課題</dt>
+                <dd class="subject-contents mb10">
+                  <div class="mb10"><span>認証とデータベースを使用したプログラムを作成する。</span></div>
+                  <ol class="ml20 mb10">
+                    <li class="mb10">ユーザー登録画面を作成する。(サインイン機能も同一の画面で実装する。)
+                      <div class="mb5">[構成要素]</div>
+                      <ul class="ml20">
+                        <li>画面タイトルを表示するためのLabel</li>
+                        <li>通知メッセージを表示するためのLabel</li>
+                        <li>Emailを入力するためのText Field</li>
+                        <li>Passwordを入力するためのText Field</li>
+                        <li>Nameを入力するためのText Field</li>
+                        <li>登録するためのButton</li>
+                        <li>サインインするためのButton</li>
+                      </ul>
+                    </li>
+                    <li class="mb10">Game画面を作成する。
+                      <div class="mb5">[構成要素]</div>
+                      <ul class="ml20">
+                        <li>画面タイトルを表示するためのLabel</li>
+                        <li>通知メッセージを表示するためのLabel</li>
+                        <li>数値入力のためのText Field</li>
+                        <li>数値保存のためのButton</li>
+                        <li>ランキング画面に遷移するためのButton</li>
+                      </ul>
+                    </li>
+                    <li>ランキング画面を作成する。
+                      <div class="mb5">[構成要素]</div>
+                      <ul class="ml20">
+                        <li>画面タイトルを表示するためのLabel</li>
+                        <li>通知メッセージを表示するためのLabel</li>
+                        <li>ランキングを表示するためのTable View</li>
+                        <li>サインアウトするためのButton</li>
+                      </ul>
+                    </li>
+                  </ol>
+                  <ul class="displayTable">
+                    <li class="tableCell pr10"><img src="images/step14_xcode_01.png" class="capture"></li>
+                    <li class="tableCell pr10"><img src="images/step14_xcode_02.png" class="capture"></li>
+                    <li class="tableCell"><img src="images/step14_xcode_03.png" class="capture"></li>
+                  </ul>
+                </dd>
+                <dt class="subject-title">補足事項</dt>
+                <dd class="subject-contents mb20"><span class="emphasis">外部ライブラリ管理ツール</span>
+                  <div class="mb10"><a href="https://cocoapods.org/" target="blank">CocoaPods</a>の導入</div>
+                  <ol class="ml20">
+                    <li>CocoaPodsをインストールする。<pre><code class="lang-bash">$ sudo gem update --system
+$ sudo gem install cocoapods
+</code></pre>
+
+                    </li>
+                    <li>プロジェクトルートでPodfileを作成する。<pre><code class="lang-bash">$ pod init
+</code></pre>
+
+                    </li>
+                    <li>FirebaseのAuthとRealtime Databaseを使用するためのライブラリをPodfileに記入する。<pre><code class="lang-ruby">target &#39;Project&#39; do
+  use_frameworks!
+
+  pod &#39;Firebase&#39;
+  pod &#39;Firebase/Auth&#39;
+  pod &#39;Firebase/Database&#39;
+
+  target &#39;ProjectTests&#39; do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target &#39;ProjectUITests&#39; do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+</code></pre>
+
+                    </li>
+                    <li>Podfileに記入したライブラリをインストールする。<pre><code class="lang-bash">$ pod install
+</code></pre>
+
+                    </li>
+                    <li>以後Xcodeの起動は.xcworkspaceから行うこと。</li>
+                  </ol>
+                </dd>
+                <dd class="subject-contents"><span class="emphasis">Mobile Backend as a Service（MBaas）</span>
+                  <div class="mb10"><a href="https://firebase.google.com/" target="blank">Firebase</a>の導入</div>
+                  <ol class="ml20">
+                    <li>Googleアカウントでサインインする。</li>
+                    <li>新規プロジェクトの作成する。</li>
+                    <li>iOSアプリにFirebaseを追加する。</li>
+                    <li>ダウンロードしたGoogleService-Info.plistをプロジェクトルートに配置する。</li>
+                    <li>メインのAppDelegateクラスに初期化コードを追加する。<pre><code class="lang-swift">import UIKit
+import Firebase // 追加
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+  var window: UIWindow?
+
+  func application(application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?)
+    -&gt; Bool {
+    FIRApp.configure() // 追加
+    return true
+  }
+}
+</code></pre>
+
+                    </li>
+                    <li>管理画面 Authentication > ログイン方法でメール/パスワードでのプロバイダにログインを有効にする。</li>
+                  </ol>
+                </dd>
+              </dl>
+              <button class="answerBtn mb10">ヒント</button>
+              <div class="answer hidden">
+                <ul class="guidance">
+                  <li>Firebaseで保存するデータ構造<pre><code class="lang-json">{
+  &quot;users&quot; : {
+    &quot;dLPCJxzqQ8YnC5KL0ZF8TFqVlHn2&quot; : {
+      &quot;email&quot; : &quot;test2@gmail.com&quot;,
+      &quot;name&quot; : &quot;test2&quot;,
+      &quot;point&quot; : 1
+    },
+    &quot;kGac0j2ESJebU2zKW9xvLg06jum2&quot; : {
+      &quot;email&quot; : &quot;test@gmail.com&quot;,
+      &quot;name&quot; : &quot;test&quot;,
+      &quot;point&quot; : 34
+    }
+  }
+}
+</code></pre>
+
+                  </li>
+                  <li>登録処理<pre><code class="lang-swift">        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user:FIRUser?, error:NSError?) in
+            if let error = error {
+                //
+                return
+            }
+
+            if let user = user {
+                guard let uid: String = user.uid, name = self.name.text, email = self.email.text else {
+                    return
+                }
+                let rootRef = FIRDatabase.database().reference()
+                rootRef.child(&quot;users&quot;).child(uid).setValue([&quot;name&quot;: name, &quot;email&quot;: email, &quot;point&quot;: 0])
+            }
+        })
+</code></pre>
+
+                  </li>
+                  <li>サインイン処理<pre><code class="lang-swift">        FIRAuth.auth()?.signIn(withEmail: email, password: password) { (user, error) in
+            if let error = error {
+                //
+                return
+            }
+            //
+        }
+</code></pre>
+
+                  </li>
+                  <li>保存処理<pre><code class="lang-swift">        if let user = FIRAuth.auth()?.currentUser {
+            guard let point = Int(self.point.text!), uid: String = user.uid else {
+                return
+            }
+            let rootRef = FIRDatabase.database().reference()
+            rootRef.child(&quot;users&quot;).child(uid).observeSingleEvent(of: .value, with: { snapshot in
+                if ( snapshot.value is NSNull ) {
+                    //
+                } else {
+                    rootRef.child(&quot;users/\(user.uid)/point&quot;).setValue(point)
+                }
+            })
+        }
+</code></pre>
+
+                  </li>
+                  <li>サインアウト処理<pre><code class="lang-swift">        do {
+            try FIRAuth.auth()?.signOut()
+            //
+        } catch let error as NSError {
+            //
+        }
+</code></pre>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="react"></div>
+    <script src="js/react-with-addons-0.13.1.js"></script>
+    <script src="js/bundle.js"></script>
+    <script src="js/highlight.pack.js"></script>
+    <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>

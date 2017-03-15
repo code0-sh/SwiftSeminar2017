@@ -1,0 +1,114 @@
+// @file _content.styl
+
+.container
+	padding 20px
+
+.play-list-item
+	margin-bottom 20px
+	padding 20px
+	border solid 1px #ccc
+
+.playground-header
+	margin-bottom 20px
+
+.step-header
+	margin-bottom 5px
+
+.step-num
+	font-weight normal
+	&:hover
+		cursor pointer
+
+.play-code
+	display none
+
+.is-open
+	display block
+	animation show 1s linear 0s
+
+.env
+	padding 10px
+	border solid 1px #ccc
+
+.env-title
+	margin-bottom 5px
+	font-size 16px
+
+.play-title
+	font-size 16px
+	margin-bottom 10px
+
+.guidance
+	list-style-position inside
+
+	li
+		margin-bottom 10px
+
+.marker
+	padding 2px
+
+.highlight
+	background-color #ff0
+
+@keyframes show{
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.learn
+	display table
+	padding 5px
+	margin-bottom 10px
+	background-color #dbdbf3
+
+	.learn-title
+		display: table-cell
+		&:after
+			content: ":"
+
+.answerBtn
+	border none
+	padding 10px
+	border-radius 2px
+	background-color #bde0fd
+
+	&:hover
+		cursor pointer
+		opacity 0.5
+
+.subject
+	.subject-title
+		font-weight bold
+		color #a52a2a
+		&:before
+			content "["
+		&:after
+			content "]"
+
+.hidden
+	display none
+
+.emphasis
+	font-weight bold
+
+.capture
+	width 100%
+	max-width 300px
+	min-width 150px
+
+@media screen and (min-width: 550px)
+	.displayTable
+		display table
+
+		.tableCell
+			display table-cell
+
+			img
+				vertical-align top
+
+@media screen and (max-width: 550px)
+	.displayTable
+		display block
+
+		.tableCell
+			display block

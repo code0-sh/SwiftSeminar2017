@@ -1,0 +1,278 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+button {
+  -webkit-box-sizing: content-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+       appearance: none;
+}
+.mb0 {
+  margin-bottom: 0px;
+}
+.ml0 {
+  margin-left: 0px;
+}
+.mr0 {
+  margin-right: 0px;
+}
+.pr0 {
+  padding-right: 0px;
+}
+.mb5 {
+  margin-bottom: 5px;
+}
+.ml5 {
+  margin-left: 5px;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.pr5 {
+  padding-right: 5px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.ml10 {
+  margin-left: 10px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.pr10 {
+  padding-right: 10px;
+}
+.mb15 {
+  margin-bottom: 15px;
+}
+.ml15 {
+  margin-left: 15px;
+}
+.mr15 {
+  margin-right: 15px;
+}
+.pr15 {
+  padding-right: 15px;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+.ml20 {
+  margin-left: 20px;
+}
+.mr20 {
+  margin-right: 20px;
+}
+.pr20 {
+  padding-right: 20px;
+}
+.mb25 {
+  margin-bottom: 25px;
+}
+.ml25 {
+  margin-left: 25px;
+}
+.mr25 {
+  margin-right: 25px;
+}
+.pr25 {
+  padding-right: 25px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.ml30 {
+  margin-left: 30px;
+}
+.mr30 {
+  margin-right: 30px;
+}
+.pr30 {
+  padding-right: 30px;
+}
+.mb35 {
+  margin-bottom: 35px;
+}
+.ml35 {
+  margin-left: 35px;
+}
+.mr35 {
+  margin-right: 35px;
+}
+.pr35 {
+  padding-right: 35px;
+}
+.mb40 {
+  margin-bottom: 40px;
+}
+.ml40 {
+  margin-left: 40px;
+}
+.mr40 {
+  margin-right: 40px;
+}
+.pr40 {
+  padding-right: 40px;
+}
+.mb45 {
+  margin-bottom: 45px;
+}
+.ml45 {
+  margin-left: 45px;
+}
+.mr45 {
+  margin-right: 45px;
+}
+.pr45 {
+  padding-right: 45px;
+}
+.mb50 {
+  margin-bottom: 50px;
+}
+.ml50 {
+  margin-left: 50px;
+}
+.mr50 {
+  margin-right: 50px;
+}
+.pr50 {
+  padding-right: 50px;
+}
+body {
+  padding: 0;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+.main-title {
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #ccc;
+  font-size: 20px;
+}
+.container {
+  padding: 20px;
+}
+.play-list-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: solid 1px #ccc;
+}
+.playground-header {
+  margin-bottom: 20px;
+}
+.step-header {
+  margin-bottom: 5px;
+}
+.step-num {
+  font-weight: normal;
+}
+.step-num:hover {
+  cursor: pointer;
+}
+.play-code {
+  display: none;
+}
+.is-open {
+  display: block;
+  animation: show 1s linear 0s;
+}
+.env {
+  padding: 10px;
+  border: solid 1px #ccc;
+}
+.env-title {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+.play-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.guidance {
+  list-style-position: inside;
+}
+.guidance li {
+  margin-bottom: 10px;
+}
+.marker {
+  padding: 2px;
+}
+.highlight {
+  background-color: #ff0;
+}
+.learn {
+  display: table;
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: #dbdbf3;
+}
+.learn .learn-title {
+  display: table-cell;
+}
+.learn .learn-title:after {
+  content: ":";
+}
+.answerBtn {
+  border: none;
+  padding: 10px;
+  border-radius: 2px;
+  background-color: #bde0fd;
+}
+.answerBtn:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.subject .subject-title {
+  font-weight: bold;
+  color: #a52a2a;
+}
+.subject .subject-title:before {
+  content: "[";
+}
+.subject .subject-title:after {
+  content: "]";
+}
+.hidden {
+  display: none;
+}
+.emphasis {
+  font-weight: bold;
+}
+.capture {
+  width: 100%;
+  max-width: 300px;
+  min-width: 150px;
+}
+@media screen and (min-width: 550px) {
+  .displayTable {
+    display: table;
+  }
+  .displayTable .tableCell {
+    display: table-cell;
+  }
+  .displayTable .tableCell img {
+    vertical-align: top;
+  }
+}
+@media screen and (max-width: 550px) {
+  .displayTable {
+    display: block;
+  }
+  .displayTable .tableCell {
+    display: block;
+  }
+}
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+#canvas-peripherals {
+  width: 400px;
+  height: 200px;
+}
