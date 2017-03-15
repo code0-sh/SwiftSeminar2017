@@ -19,7 +19,7 @@
         <h2 class="env-title">実行環境</h2>macOS Sierra 10.12.3 <br> Xcode 8.3 beta 3(8W132p)
       </section>
       <h3 class="play-title">Bluetooth Low Energy</h3>
-      <p class="mb10">※各Stepのプログラムは<a href="https://github.com/code0-sh/SwiftSeminarProgram2017" target="blank">こちら</a>にあります。</p>
+      <p class="mb10">※使用するプログラムは<a href="https://github.com/code0-sh/iOS-BLE" target="blank">こちら</a>にあります。</p>
       <section class="playground">
         <div class="play-list">
           <div class="play-list-item">
@@ -27,19 +27,28 @@
               <div class="step-num"><i class="fa fa-plus-square"></i> Step1: Bluetooth Low Energyとは</div>
             </div>
             <div class="play-code">
-              <ul class="guidance">
-                <li>Bluetooth Low Energy(BLE, Bluetooth4.0)とは2.4GHzの省電力無線通信プロトコルです。<br>※ プロトコルとは通信での送受信の手順を定めた規格のこと。<br>以下の特徴をもつ。</li>
-                <ul class="mb20">
-                  <li>低消費電力: コイン型リチウムイオン電池1個で、通信モジュールを1～2年間動作させることが可能</li>
-                  <li>通信速度: 10～50kbps</li>
-                  <li>通信距離: 2.5〜50m ※障害物によって影響を受ける。</li>
-                </ul>
-                <dl class="mb20">
-                  <dt>BLEの登場人物</dt>
-                  <dd>
+              <div class="guidance">
+                <p class="mb10">Bluetooth Low Energy(BLE, Bluetooth4.0)とは2.4GHzの省電力無線通信プロトコルです。<br>※ プロトコルとは通信での送受信の手順を定めた規格のこと。<br>※ クラシックBluetoothとは互換性がない。</p>
+                <dl class="subject mb20">
+                  <dt class="subject-title">特徴</dt>
+                  <dd class="subject-contents">
                     <ul>
-                      <li>ペリフェラル(周辺装置、Peripherals)</li>
-                      <li>セントラル(中央装置、Centrals)</li>
+                      <li>低消費電力: コイン型リチウムイオン電池1個で、通信モジュールを1～2年間動作させることが可能</li>
+                      <li>通信速度: 10～50kbps</li>
+                      <li>通信距離: 2.5〜50m (※ 障害物によって影響を受ける。)</li>
+                    </ul>
+                  </dd>
+                </dl>
+                <dl class="subject mb20">
+                  <dt class="subject-title">利用例</dt>
+                  <dd class="subject-contents">IoT機器、ウェラブル機器など</dd>
+                </dl>
+                <dl class="subject mb20">
+                  <dt class="subject-title">BLEの登場人物</dt>
+                  <dd class="subject-contents">
+                    <ul>
+                      <li>ペリフェラル(周辺装置、Peripherals) ex. 温度センサー、加速度センサー</li>
+                      <li>セントラル(中央装置、Centrals) ex. PC、スマートフォン(※ ペリフェラルにもなり得る。)</li>
                     </ul>
                   </dd>
                 </dl>
@@ -55,79 +64,299 @@
                   <dt><span class="highlight marker">セントラル</span></dt>
                   <dd>必要なデータを提供してくれるペリフェラルがないか走査し、該当するペリフェラルを検出すると、接続を要求し、データのやり取りを始める。</dd>
                 </dl>
-              </ul>
+              </div>
             </div>
           </div>
         </div>
         <div class="play-list">
           <div class="play-list-item">
             <div class="step-header">
-              <div class="step-num"><i class="fa fa-plus-square"></i> Step2: Core Bluetoothフレームワーク</div>
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step2: ペリフェラル</div>
+            </div>
+            <div class="play-code">
+              <div class="guidance">
+                <dl class="subject mb20">
+                  <dt class="subject-title">データ構造</dt>
+                  <dd class="subject-contents">
+                    <ul>
+                      <li>1つ以上の<span class="highlight marker">サービス（service）</span>を提供する。</li>
+                      <li>サービスは<span class="highlight marker">特性（characteristic）</span>またはサービスから成る。</li>
+                    </ul>
+                  </dd>
+                </dl>
+                <div class="mb20"><img src="images/service.png"></div>
+                <dl class="subject mb20">
+                  <dt class="subject-title">アドバタイズ</dt>
+                  <dd class="subject-contents">
+                    ペリフェラルが自身の存在を知らせるために出す「広告」のこと。<br>
+                    アドバタイズパケットの形式で、所定のデータを同報送信（broadcast）する。<br>
+                    ※ アドバタイズパケット（advertising packet）は比較的小さなデータバンドルで、ペリフェラルの名前や主な機能など、提供可能なデータを表す情報が入っている。
+                  </dd>
+                </dl>
+                <div class="css-advertising mb20">
+                  <div class="css-advertising-central">Central</div>
+                  <div class="css-advertising-Ad left">Ad</div>
+                  <div class="css-advertising-Ad">Ad</div>
+                  <div class="css-advertising-Ad">Ad</div>
+                  <div class="css-advertising-Ad">Ad</div>
+                  <div class="css-advertising-peripheral">Peripheral</div>
+                </div>
+                <dl class="subject">
+                  <dt class="subject-title">Flow</dt>
+                  <dd class="subject-contents">
+                    <ol>
+                      <li>サービスを作成する。</li>
+                      <li>アドバタイズを開始する。</li>
+                      <li>セントラルからの読み込み/書き込み/通知要求に応答する。</li>
+                    </ol>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step3: セントラル</div>
             </div>
             <div class="play-code">
               <div class="guidance mb10">
-                <p>iOS/Macアプリケーションで、BLEを実装したデバイスと通信するために使用するフレームワーク</p>
+                <dl class="subject mb20">
+                  <dt class="subject-title">Flow</dt>
+                  <dd class="subject-contents">
+                    <ol>
+                      <li>該当のサービスを提供しているペリフェラルを検索する。</li>
+                      <li>ペリフェラルに接続する。</li>
+                      <li>サービスを検索する。</li>
+                      <li>サービスの特性を検索する。</li>
+                      <li>特性値の読み込み/書き込み/通知要求を行う。</li>
+                    </ol>
+                  </dd>
+                </dl>
               </div>
-              <dl class="subject mb10">
-                <dt class="subject-title">補足事項</dt>
-                <dd class="subject-contents"><span class="emphasis">SpriteKitのビュー、シーン、ノード、アクション</span>
-                  <ul class="ml20 mb10">
-                    <li>ビュー:シーンをのせる舞台。UIViewControllerのサブクラス</li>
-                    <li>シーン:ゲーム画面、結果画面などの各画面。SKSceneのサブクラス</li>
-                    <li>ノード:シーンにのせる登場人物。SKNodeのサブクラス(SKSpriteNode,SKLabelNode,..)</li>
-                    <li>アクション:ノードの振る舞い。SKActionのメソッドで実行する(removeFromParent,move,..)</li>
-                  </ul><img src="images/step2_xcode_01.png">
-                </dd>
-              </dl>
             </div>
           </div>
         </div>
         <div class="play-list">
           <div class="play-list-item">
             <div class="step-header">
-              <div class="step-num"><i class="fa fa-plus-square"></i> Step3: 文字を表示する</div>
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step4: Core Bluetoothフレームワーク</div>
             </div>
             <div class="play-code">
-              <dl class="learn">
-                <dt class="learn-title">習得事項</dt>
-                <dd class="learn-contents">SKLabelNodeを使って文字を表示できる。</dd>
-              </dl>
-              <dl class="subject mb10">
-                <dt class="subject-title">課題</dt>
-                <dd class="subject-contents">
-                  <div class="mb10"><span>SKLabelNodeを使って文字列「Hello, SpriteKit」を表示する。</span></div>
-                  <ul class="ml20 mb10">
-                    <li>フォント名 Chalkduster</li>
-                    <li>文字サイズ 30</li>
-                    <li>文字色 green</li>
-                    <li>文字の位置 画面の中心</li>
-                  </ul><img src="images/step3_xcode_01.png" class="capture">
-                </dd>
-              </dl>
-              <button class="answerBtn mb10">解答例</button>
-              <div class="answer hidden"><pre><code class="lang-swift">class GameScene: SKScene {
-    /// Sceneが表示された際に実行される
-    override func didMove(to view: SKView) {
-        // ラベルのフォントを指定しインスタンスを生成する
-        let label = SKLabelNode(fontNamed:&quot;Chalkduster&quot;)
-        // ラベルに表示する文字列
-        label.text = &quot;Hello, SpriteKit&quot;
-        // ラベルの文字サイズ
-        label.fontSize = 30
-        // ラベルの文字色
-        label.fontColor = SKColor.green()
-        // ラベルの位置
-        label.position = CGPoint(x:self.frame.midX, y:self.frame.midY);
+              <div class="guidance mb10">
+                <div class="mb20">iOS/Macアプリケーションで、BLEを実装したデバイスと通信するために使用するフレームワーク<br>Appleの<a href="https://developer.apple.com/jp/documentation/CoreBluetoothPG.pdf" target="blank">ドキュメント</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step5: ペリフェラルの実装</div>
+            </div>
+            <div class="play-code">
+              <div class="guidance mb10">
+                <dl>
+                  <ol>
+                    <li>ペリフェラルマネージャを生成する。
+                      <div class="mb10"><pre><code class="lang-swift">let peripheralManager = CBPeripheralManager(delegate: self, queue: nil, options: nil)
+</code></pre>
 
-        // シーンに追加
-        self.addChild(label)
+                      </div>
+                    </li>
+                    <li>ペリフェラルマネージャにペリフェラルが提供するサービスや特性を設定する。
+                      <div class="mb10"><pre><code class="lang-swift">func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+    /// サービスを作成
+    let serviceUUID = CBUUID(string: &quot;00001234-0000-1000-8000-00805f9b34fb&quot;)
+    let service = CBMutableService(type: serviceUUID, primary: true)
+    /// サービスUUIDを配列に保存する
+    self.serviceUUIDs.append(serviceUUID)
+    /// 特性を作成
+    let characteristicUUID = CBUUID(string: &quot;00001234-0001-1000-8000-00805f9b34fb&quot;)
+    /// * 重要なデータについてはペアリングした機器からのアクセスのみを許可する
+    let properties: CBCharacteristicProperties = [.notify, .read, .write]
+    let permissions: CBAttributePermissions = [.readable, .writeable]
 
-        // 背景色
-        self.backgroundColor = SKColor.purple()
+    let characteristic = CBMutableCharacteristic(type: characteristicUUID,
+                                                  properties: properties,
+                                                  value: nil,
+                                                  permissions: permissions)
+    /// サービスに特性を設定
+    service.characteristics = [characteristic]
+    /// ペリフェラルマネージャにサービスを設定
+    peripheralManager.add(service)
+}
+</code></pre>
+
+                      </div>
+                    </li>
+                    <li>サービスをアドバタイズする。
+                      <div class="mb10"><pre><code class="lang-swift">/// * アドバタイズするのはデバイスのローカル名とサービスのUUIDだけ
+let advertisementData = [CBAdvertisementDataLocalNameKey: &quot;Test Device&quot;, CBAdvertisementDataServiceUUIDsKey: self.serviceUUIDs]
+peripheralManager.startAdvertising(advertisementData)
+</code></pre>
+
+                      </div>
+                    </li>
+                    <li>
+                      <div>セントラルからの読み込み要求に応答する。
+                        <div class="mb10"><pre><code class="lang-swift">func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
+    if request.characteristic.uuid.isEqual(self.characteristic.uuid) {
+        request.value = self.characteristic.value
+        peripheralManager.respond(to: request, withResult: .success)
     }
 }
 </code></pre>
 
+                        </div>
+                      </div>
+                      <div>セントラルからの書き込み要求に応答する。
+                        <div class="mb10"><pre><code class="lang-swift">func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
+    for request in requests {
+        if request.characteristic.uuid.isEqual(self.characteristic.uuid) {
+            self.characteristic.value = request.value
+        }
+    }
+    peripheralManager.respond(to: requests[0], withResult: .success)
+}
+</code></pre>
+
+                        </div>
+                      </div>
+                      <div>セントラルからの通知要求に応答する。
+                        <div class="mb10"><pre><code class="lang-swift">func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+}
+</code></pre>
+
+                        </div>
+                      </div>
+                    </li>
+                  </ol>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list">
+          <div class="play-list-item">
+            <div class="step-header">
+              <div class="step-num"><i class="fa fa-plus-square"></i> Step6: セントラルの実装</div>
+            </div>
+            <div class="play-code">
+              <div class="guidance mb10">
+                <dl>
+                  <ol>
+                    <li>セントラルマネージャを生成する。
+                      <div class="mb10"><pre><code class="lang-swift">let centralManager = CBCentralManager(delegate: self, queue: nil, options: nil)
+</code></pre>
+
+                      </div>
+                    </li>
+                    <li>サービスを提供しているペリフェラルを検索する。
+                      <div class="mb10"><pre><code class="lang-swift">func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    switch central.state {
+    case .poweredOn:
+        // CBUUIDオブジェクトの配列を指定すると該当するサービスをアドバタイズしているペリフェラルのみが返される
+        self.centralManager.scanForPeripherals(withServices: [serviceUUID], options: nil)
+    default:
+        return
+    }
+}
+</code></pre>
+
+                      </div>
+                    </li>
+                    <li>ペリフェラルに接続する。
+                      <div class="mb10"><pre><code class="lang-swift">func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+    self.centralManager.connect(peripheral, options: nil)
+}
+</code></pre>
+
+                      </div>
+                    </li>
+                    <li>サービスを検索する。
+                      <div class="mb10"><pre><code class="lang-swift">func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+    /// ペリフェラルとのやり取りを始める前に、ペリフェラルのデリデートをセット
+    peripheral.delegate = self
+    /// サービスの検出開始
+    /// 不要なサービスが多数見つかる場合、電池と時間が無駄になるので必要なサービスのUUIDを具体的に指定すると良い
+    peripheral.discoverServices([serviceUUID])
+}
+</code></pre>
+
+                      </div>
+                    </li>
+                    <li>サービスの特性を検索する。
+                      <div class="mb10"><pre><code class="lang-swift">func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+    guard let services = peripheral.services  else {
+        return
+    }
+    for service in services {
+        /// 特性を検出する
+        /// 不要な特性が多数見つかる場合、電池と時間が無駄になるので必要な特性のUUIDを具体的に指定する
+        peripheral.discoverCharacteristics([characteristicUUID], for: service)
+    }
+}
+</code></pre>
+
+                      </div>
+                    </li>
+                    <li>
+                      <div>特性値の読み込みを行う。
+                        <div class="mb10"><pre><code class="lang-swift">func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+    guard let characteristics = service.characteristics else {
+        return
+    }
+    for characteristic in characteristics {
+        if characteristic.properties.contains(.read) {
+            /// 特性値を読み取る
+            peripheral.readValue(for: characteristic)
+        }
+    }
+}
+</code></pre>
+
+                        </div>
+                      </div>
+                      <div>特性値の書き込みを行う。
+                        <div class="mb10"><pre><code class="lang-swift">func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+    guard let characteristics = service.characteristics else {
+        return
+    }
+    for characteristic in characteristics {
+        if characteristic.properties.contains(.write) {
+            guard let data = writeTextField.text?.data(using: String.Encoding.utf8) else {
+                return
+            }
+            /// 特性値を書き込む
+            peripheral.writeValue(data, for: characteristic, type: CBCharacteristicWriteType.withResponse)
+        }
+    }
+}
+</code></pre>
+
+                        </div>
+                      </div>
+                      <div>特性値の通知要求を行う。
+                        <div class="mb10"><pre><code class="lang-swift">func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+    guard let characteristics = service.characteristics else {
+        return
+    }
+    for characteristic in characteristics {
+        if characteristic.properties.contains(.notify) {
+            /// 特性値が変化したときに通知するよう申し込む
+            peripheral.setNotifyValue(true, for: characteristic)
+        }
+    }
+}
+</code></pre>
+
+                        </div>
+                      </div>
+                    </li>
+                  </ol>
+                </dl>
               </div>
             </div>
           </div>
@@ -237,44 +466,7 @@
               <button class="answerBtn mb10">解答例</button>
               <div class="answer hidden">
                 <ul class="guidance">
-                  <li><pre><code class="lang-swift">class GameScene: SKScene {
-    /// 背景画像を設定する
-    func setupBackground(baseNode: SKNode) {
-        // 背景画像からテクスチャを作成
-        let texture = SKTexture(imageNamed: &quot;background&quot;)
-        // フィルタリングモード（テクスチャの本来のサイズ以外で描画される場合に使用される）
-        // .linear クォリティー高い
-        // .nearest クォリティー低い
-        texture.filteringMode = .nearest
-
-        // 必要な画像枚数を算出
-        let needHeightNumber: CGFloat = ceil(self.frame.size.height / texture.size().height) + 1
-        let needWidthNumber: CGFloat = ceil(self.frame.size.width / texture.size().width)
-
-        // アニメーションを作成
-        let moveAnim = SKAction.moveBy(x: 0.0, y: -texture.size().height, duration: TimeInterval(texture.size().height / 10.0))
-        let resetAnim = SKAction.moveBy(x: 0.0, y: texture.size().height, duration: 0.0)
-        let repeatForeverAnim = SKAction.repeatForever(SKAction.sequence([moveAnim, resetAnim]))
-
-        // 画像の配置とアニメーションを設定
-        for i in 0 ... Int(needWidthNumber) {
-            for j in 0 ... Int(needHeightNumber) {
-                let sprite = SKSpriteNode(texture: texture)
-                sprite.zPosition = -100
-                sprite.position = CGPoint(x: CGFloat(i) * sprite.size.width, y: CGFloat(j) * sprite.size.height)
-                sprite.speed = 20
-                sprite.run(repeatForeverAnim)
-                baseNode.addChild(sprite)
-            }
-        }
-    }
-    /// Sceneが表示された際に実行される
-    override func didMove(to view: SKView) {
-        let baseNode = SKNode()
-        self.setupBackground(baseNode: baseNode)
-        self.addChild(baseNode)
-    }
-}
+                  <li><pre><code class="lang-swift">let peripheralManager = CBPeripheralManager(delegate: self, queue: nil, options: nil)
 </code></pre>
 
                   </li>
@@ -312,48 +504,48 @@
               <button class="answerBtn mb10">ヒント</button>
               <div class="answer hidden">
                 <ul class="guidance">
-                  <li>衝突判定用のビット値の定義<pre><code class="lang-swift">    struct ColliderType {
-        static let Enemy: UInt32 = (1 &lt;&lt; 0)
-        static let World: UInt32 = (1 &lt;&lt; 1)
+                  <li>衝突判定用のビット値の定義<pre><code class="lang-swift">let centralManager = CBCentralManager(delegate: self, queue: nil, options: nil)
+</code></pre>
+
+                  </li>
+                  <li>対象物の生成と配置<pre><code class="lang-swift">func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    switch central.state {
+    case .poweredOn:
+        // CBUUIDオブジェクトの配列を指定すると該当するサービスをアドバタイズしているペリフェラルのみが返される
+        self.centralManager.scanForPeripherals(withServices: [serviceUUID], options: nil)
+    default:
+        return
     }
+}
 </code></pre>
 
                   </li>
-                  <li>対象物の生成と配置<pre><code class="lang-swift">        let radius: CGFloat = 10 // エネミー画像の半径
-        let texture = SKTexture(imageNamed: &quot;enemy&quot;)
-        let enemy = SKSpriteNode(texture: texture)
-        enemy.size = CGSize(width: radius * 2, height: radius * 2)
-        let randIntX = radius + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width - radius * 2)))
-        let randIntY = radius + (CGFloat)(arc4random_uniform((UInt32)(self.frame.height - radius * 2)))
-        enemy.position = CGPoint(x:randIntX, y:randIntY)
+                  <li>Sceneの物理設定<pre><code class="lang-swift">func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+    self.centralManager.connect(peripheral, options: nil)
+}
 </code></pre>
 
                   </li>
-                  <li>Sceneの物理設定<pre><code class="lang-swift">        self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -0.5) // 重力
-        self.physicsWorld.contactDelegate = self // 衝突デリゲート
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
-        self.physicsBody?.restitution = 1.0 // 反発係数
-        self.physicsBody?.linearDamping = 0.0 // 空気抵抗
-        self.physicsBody?.friction = 0.0 // 摩擦
-        self.physicsBody?.categoryBitMask = ColliderType.World // 物体種別
-        self.physicsBody?.collisionBitMask = ColliderType.Enemy // どの物体と接触した場合に衝突させるか
+                  <li>対象物の物理設定<pre><code class="lang-swift">func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+    /// ペリフェラルとのやり取りを始める前に、ペリフェラルのデリデートをセット
+    peripheral.delegate = self
+    /// サービスの検出開始
+    /// 不要なサービスが多数見つかる場合、電池と時間が無駄になるので必要なサービスのUUIDを具体的に指定すると良い
+    peripheral.discoverServices([serviceUUID])
+}
 </code></pre>
 
                   </li>
-                  <li>対象物の物理設定<pre><code class="lang-swift">            enemy.physicsBody = SKPhysicsBody(circleOfRadius: radius)
-            enemy.physicsBody?.restitution = 1.0 // 反発係数
-            enemy.physicsBody?.linearDamping = 0.0 // 空気抵抗
-            enemy.physicsBody?.mass = 1.0 // 質量
-            enemy.physicsBody?.friction = 0.0 // 摩擦
-            enemy.physicsBody?.categoryBitMask = ColliderType.Enemy // 物体種別
-            enemy.physicsBody?.collisionBitMask = ColliderType.Enemy | ColliderType.World // どの物体と接触した場合に衝突させるか
-            enemy.physicsBody?.contactTestBitMask = ColliderType.Enemy // どの物体と接触した場合にイベントを発生させるか
-</code></pre>
-
-                  </li>
-                  <li>衝突時のイベント<pre><code class="lang-swift">    func didBegin(_ contact: SKPhysicsContact) {
-        contact.bodyA.node?.removeFromParent() // 衝突した一方を削除する
+                  <li>衝突時のイベント<pre><code class="lang-swift">func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+    guard let services = peripheral.services  else {
+        return
     }
+    for service in services {
+        /// 特性を検出する
+        /// 不要な特性が多数見つかる場合、電池と時間が無駄になるので必要な特性のUUIDを具体的に指定する
+        peripheral.discoverCharacteristics([characteristicUUID], for: service)
+    }
+}
 </code></pre>
 
                   </li>
