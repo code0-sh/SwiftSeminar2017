@@ -55,9 +55,14 @@ for (var i = 0; i < answerBtns.length; i++) {
 	let image;
 
 	// 画像を描画
-	function drawImage() {
+	(function(){
 		image = new Image();
-		image.src = "/images/iphone.png";
+		image.src = "./images/iphone.png";
+		image.load = function() {
+			ctx.drawImage(image, 85, 48, 32, 64);
+		}
+	})();
+	function drawImage() {
 		ctx.drawImage(image, 85, 48, 32, 64);
 	}
 
