@@ -276,3 +276,51 @@ body {
   width: 400px;
   height: 200px;
 }
+.css-advertising {
+  width: 400px;
+  overflow: hidden;
+}
+.css-advertising-central {
+  float: left;
+  width: 100px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  background-color: #cbf279;
+  padding: 10px;
+  text-align: center;
+}
+.css-advertising-Ad {
+  float: left;
+  margin-top: 7px;
+  margin-left: 15px;
+  width: 30px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  background-color: #eaafaf;
+  padding: 5px;
+  text-align: center;
+  font-size: 10px;
+}
+.css-advertising-Ad.left {
+  margin-left: 30px;
+  animation-duration: 3s;
+  animation-name: sending;
+  animation-iteration-count: infinite;
+}
+.css-advertising-peripheral {
+  float: right;
+  width: 100px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  background-color: #b8eaf2;
+  padding: 10px;
+  text-align: center;
+}
+@keyframes sending {
+  from {
+    margin-left: 30px;
+  }
+  to {
+    margin-left: 0px;
+  }
+}

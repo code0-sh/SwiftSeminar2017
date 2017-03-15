@@ -42,23 +42,13 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var HelloReact = React.createClass({
-		displayName: "HelloReact",
+	var _interopRequire = __webpack_require__(1)["default"];
 
-		render: function render() {
-			return React.createElement(
-				"div",
-				{ className: "container" },
-				this.props.name
-			);
-		}
-	});
-
-	React.render(React.createElement(HelloReact, { name: "" }), document.getElementById("react"));
+	var AnimetePripherals = _interopRequire(__webpack_require__(2));
 
 	/**
 	 * codeのfadeIn, fadeOut
@@ -96,63 +86,150 @@
 	};
 
 	// ================ ペリペラルのアニメーション ===============
-	(function () {
-		var canvas = document.getElementById("canvas-peripherals");
-		var ctx = canvas.getContext("2d");
-		var speed = 2;
-		var circle_scale = 0;
-		var requestId = undefined;
-		var image = undefined;
+	new AnimetePripherals();
 
-		// 画像を描画
-		(function () {
-			image = new Image();
-			image.src = "./images/iphone.png";
-			image.load = function () {
-				ctx.drawImage(image, 85, 48, 32, 64);
-			};
-		})();
-		function drawImage() {
-			ctx.drawImage(image, 85, 48, 32, 64);
-		}
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
 
-		// 円を描画
-		function drawCircle(circle_scale) {
-			ctx.beginPath();
-			ctx.arc(100, 80, circle_scale, 0, Math.PI * 2, false);
-			ctx.strokeStyle = "#4169e1";
-			ctx.stroke();
-		}
+	"use strict";
 
-		// requestAnimFrameの設定
-		window.requestAnimFrame = (function () {
-			return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
-				window.setTimeout(callback, 1000 / 60);
-			};
-		})();
+	exports["default"] = function (obj) {
+	  return obj && obj.__esModule ? obj["default"] : obj;
+	};
 
-		// アニメーション
-		function loop() {
-			requestId = requestAnimFrame(loop);
-			// 描画をクリア
-			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-			// 円を拡大
-			circle_scale += speed;
-			// 円を描画
-			drawCircle(circle_scale);
-			// 画像を描画
-			drawImage();
-		}
+	exports.__esModule = true;
 
-		// 3秒間隔でアニメーションを繰り返す。
-		window.setInterval(function () {
-			var cancelAnimationFrame = window.cancelAnimationFrame || window.mozcancelAnimationFrame || window.webkitcancelAnimationFrame || window.mscancelAnimationFrame;
-			window.cancelAnimationFrame = cancelAnimationFrame;
-			window.cancelAnimationFrame(requestId);
-			circle_scale = 0;
-			loop();
-		}, 3000);
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _classCallCheck = __webpack_require__(3)["default"];
+
+	var _createClass = __webpack_require__(4)["default"];
+
+	var AnimetePripherals = (function () {
+	  function AnimetePripherals() {
+	    _classCallCheck(this, AnimetePripherals);
+
+	    this.canvas = document.getElementById("canvas-peripherals");
+	    this.ctx = this.canvas.getContext("2d");
+	    this.speed = 2;
+	    this.circle_scale = 0;
+	    this.requestId;
+	    this.image = new Image();
+	    this.image.src = "./images/iphone.png";
+	    this.init();
+	  }
+
+	  _createClass(AnimetePripherals, {
+	    drawImage: {
+
+	      // 画像を描画
+
+	      value: function drawImage() {
+	        this.ctx.drawImage(this.image, 85, 48, 32, 64);
+	      }
+	    },
+	    drawCircle: {
+
+	      // 円を描画
+
+	      value: function drawCircle(circle_scale) {
+	        this.ctx.beginPath();
+	        this.ctx.arc(100, 80, this.circle_scale, 0, Math.PI * 2, false);
+	        this.ctx.strokeStyle = "#4169e1";
+	        this.ctx.stroke();
+	      }
+	    },
+	    loopAnimate: {
+
+	      // アニメーション
+
+	      value: function loopAnimate() {
+	        var self = this;
+	        this.requestId = window.requestAnimFrame(function () {
+	          self.loopAnimate();
+	        });
+	        // 描画をクリア
+	        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+	        // 円を拡大
+	        this.circle_scale += this.speed;
+	        // 円を描画
+	        this.drawCircle(this.circle_scale);
+	        // 画像を描画
+	        this.drawImage();
+	      }
+	    },
+	    init: {
+	      value: function init() {
+	        var _this = this;
+
+	        // requestAnimFrameの設定
+	        window.requestAnimFrame = (function () {
+	          return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+	            window.setTimeout(callback, 1000 / 60);
+	          };
+	        })();
+
+	        // 3秒間隔でアニメーションを繰り返す。
+	        setInterval(function () {
+	          var cancelAnimationFrame = window.cancelAnimationFrame || window.mozcancelAnimationFrame || window.webkitcancelAnimationFrame || window.mscancelAnimationFrame;
+	          window.cancelAnimationFrame = cancelAnimationFrame;
+	          window.cancelAnimationFrame(_this.requestId);
+	          _this.circle_scale = 0;
+	          _this.loopAnimate();
+	        }, 3000);
+	      }
+	    }
+	  });
+
+	  return AnimetePripherals;
 	})();
+
+	module.exports = AnimetePripherals;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	exports["default"] = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+
+	exports.__esModule = true;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	exports["default"] = (function () {
+	  function defineProperties(target, props) {
+	    for (var key in props) {
+	      var prop = props[key];
+	      prop.configurable = true;
+	      if (prop.value) prop.writable = true;
+	    }
+
+	    Object.defineProperties(target, props);
+	  }
+
+	  return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  };
+	})();
+
+	exports.__esModule = true;
 
 /***/ }
 /******/ ]);
