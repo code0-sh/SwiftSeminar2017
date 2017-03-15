@@ -1,6 +1,6 @@
 ## Swift Seminar2017
 
-[Swift Seminar](http://code0-sh.github.io/SwiftSeminar2017/)のソースコードです。
+[Swift Seminar 2017](http://code0-sh.github.io/SwiftSeminar2017/)のソースコードです。
 
 ビルドシステムとしてGulp.jsを使用しています。
 
